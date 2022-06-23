@@ -1,19 +1,9 @@
-import { useEffect, useState } from "react";
-import { EventService } from "../services/EventService";
 import { Link } from "react-router-dom";
+import { useEventList } from "../hooks/useEventList";
 
 export const EventList = () => {
 
-    const [events, setEvents] = useState([]); 
-
-    const getEvents = async () => {
-        const {data} = await EventService.getEvents();
-        setEvents(data)
-    }
-
-    useEffect(() => {
-        getEvents();
-    }, [])
+    const [events] = useEventList();
 
     return (
         <ul>

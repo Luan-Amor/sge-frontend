@@ -4,13 +4,13 @@ import { Home } from "../views/Home";
 import { Login } from "../views/Login";
 import { SingUp } from "../views/SingUp";
 import { UserProfile } from "../views/UserProfile";
-import { useToken } from "../hooks/useToken"
 import { useCookies } from "react-cookie";
+import { NewEvent } from "../views/NewEvent";
+import { UserEvents } from "../views/UserEvents";
 
 export const ApplicationRoutes = () => {
 
-	const { token, setToken } = useToken();
-	const [cookies] = useCookies(['perfil']);
+	const [cookies] = useCookies(['token', 'perfil']);
 	const PROFILE_COMUM = 'Comum';
 	const PROFILE_ENTERPRISE = 'Enterprise';
 	const PROFILE_ADMIN = 'Admin';
@@ -18,7 +18,7 @@ export const ApplicationRoutes = () => {
 	function RequireAuth({ children, perfil }) {
 		let location = useLocation();
 
-		if (!token) {
+		if (!cookies.token) {
 			return <Navigate to="/login" state={{ from: location }} replace />;
 		}
 		if(!cookies.perfil.some(p => p === perfil)){
@@ -29,11 +29,17 @@ export const ApplicationRoutes = () => {
 
 	return (
 		<Routes>
+			{/* Publico */}
 			<Route path="/" exact element={<Home />} />
-			<Route path="/events/:id" exact element={<EventDetail />} />
+			<Route path="/login" exact element={<Login />} />
 			<Route path="/singup" exact element={<SingUp />} />
-			<Route path="/login" exact element={<Login setToken={setToken} />} />
+			<Route path="/events/:id" exact element={<EventDetail />} />
+			{/* Comum */}
 			<Route path="/users/" exact element={ <RequireAuth perfil={PROFILE_COMUM} ><UserProfile /></RequireAuth>} />
+			{/* Enterprise */}
+			<Route path="/novo/evento" exact element={ <NewEvent/>} />
+			<Route path="/eventos/criados" exact element={ <RequireAuth perfil={PROFILE_ENTERPRISE} ><UserEvents/></RequireAuth>} />
+			{/* Admin */}
 		</Routes>
 	)
 }

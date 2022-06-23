@@ -9,7 +9,7 @@ export const EventDetail = () =>{
     const [event, setEvent] = useState({})
 
     const getEvent = async () => {
-        const {data} = await EventService.getEventById(id);
+        const { data } = await EventService.getEventById(id);
         setEvent(data);
     }
 
@@ -18,7 +18,7 @@ export const EventDetail = () =>{
     })
 
     return (
-        <div>
+        <div className="container">
             <h1>{event.name}</h1>
             <p>{event.description}</p>
             <p>{event.speaker}</p>

@@ -1,11 +1,16 @@
-import { EventList } from '../components/EventList'
+import { Card } from '../components/Card';
+import { useEventList } from '../hooks/useEventList'
+import { Link } from "react-router-dom";
 
 export const Home = () => {
 
+    const [events] = useEventList();
+
     return (
-        <div>
-            <p>Oiii eu sou a página home</p>
-            <EventList></EventList>
+        <div className='container'>
+            <div className='d-flex flex-wrap'>
+                {events.map((event, i) => <Link to={`/events/${event.id}`} key={i}><Card item={event}></Card></Link>)}
+            </div>
         </div>
     )
 

@@ -8,8 +8,8 @@ export const useToken = () => {
     const [token, setToken] = useState(cookies.token);
 
     const saveToken = (userToken, profile) => {
-        setCookie('token', userToken, { path: '/', maxAge: 9 });
-        setCookie('perfil', JSON.stringify(profile), { path: '/', maxAge: 9 });
+        setCookie('token', userToken, { path: '/', expires: new Date(Date.now() +10000000) });
+        setCookie('perfil', JSON.stringify(profile), { path: '/', expires: new Date(Date.now() +10000000) });
 
         setToken(userToken);
     };
