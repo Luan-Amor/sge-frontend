@@ -4,24 +4,21 @@ import { Home } from "../views/Home";
 import { Login } from "../views/Login";
 import { SingUp } from "../views/SingUp";
 import { UserProfile } from "../views/UserProfile";
-import { useCookies } from "react-cookie";
 import { NewEvent } from "../views/NewEvent";
 import { UserEvents } from "../views/UserEvents";
+import { Profile } from '../config/profiles'
+import { AuthService } from "../services/AuthService";
+import { Enroll } from "../views/Enroll";
 
-export const ApplicationRoutes = () => {
-
-	const [cookies] = useCookies(['token', 'perfil']);
-	const PROFILE_COMUM = 'Comum';
-	const PROFILE_ENTERPRISE = 'Enterprise';
-	const PROFILE_ADMIN = 'Admin';
+export const ApplicationRoutes = ({ setCookies }) => {
 
 	function RequireAuth({ children, perfil }) {
 		let location = useLocation();
 
-		if (!cookies.token) {
+		if (!AuthService.isAuthenticated()) {
 			return <Navigate to="/login" state={{ from: location }} replace />;
 		}
-		if(!cookies.perfil.some(p => p === perfil)){
+		if(!AuthService.hasProfile(perfil)){
 			return <Navigate to="/" state={{ from: location }} replace />;
 		}
 		return children;
@@ -31,14 +28,15 @@ export const ApplicationRoutes = () => {
 		<Routes>
 			{/* Publico */}
 			<Route path="/" exact element={<Home />} />
-			<Route path="/login" exact element={<Login />} />
+			<Route path="/login" exact element={<Login setCookies={setCookies} />} />
 			<Route path="/singup" exact element={<SingUp />} />
 			<Route path="/events/:id" exact element={<EventDetail />} />
 			{/* Comum */}
-			<Route path="/users/" exact element={ <RequireAuth perfil={PROFILE_COMUM} ><UserProfile /></RequireAuth>} />
+			<Route path="/users/" exact element={ <RequireAuth perfil={Profile.COMUM} ><UserProfile /></RequireAuth>} />
+			<Route path="/enroll/" exact element={ <RequireAuth perfil={Profile.COMUM} ><Enroll /></RequireAuth>} />
 			{/* Enterprise */}
-			<Route path="/novo/evento" exact element={ <NewEvent/>} />
-			<Route path="/eventos/criados" exact element={ <RequireAuth perfil={PROFILE_ENTERPRISE} ><UserEvents/></RequireAuth>} />
+			<Route path="/novo/evento" exact element={ <RequireAuth perfil={Profile.ENTERPRISE} ><NewEvent/></RequireAuth>} />
+			<Route path="/eventos/criados" exact element={ <RequireAuth perfil={Profile.ENTERPRISE} ><UserEvents/></RequireAuth>} />
 			{/* Admin */}
 		</Routes>
 	)

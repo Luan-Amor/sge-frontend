@@ -1,13 +1,11 @@
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useState } from 'react';
 import { AuthService } from '../services/AuthService';
-import { useCookies } from 'react-cookie';
 
-export const Login = () => {
+export const Login = ({ setCookies }) => {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
-    const [, setCookie] = useCookies(['token', 'perfil', 'name']);
 
     let navigate = useNavigate();
     let location = useLocation();
@@ -20,9 +18,9 @@ export const Login = () => {
         const { token, profile, name } = await AuthService.login({ email, password })
             .then(({ data }) => data);
 
-        setCookie('token', token, { path: '/', expires: new Date(Date.now() +100000) });
-        setCookie('perfil', JSON.stringify(profile), { path: '/', expires: new Date(Date.now() +100000) });
-        setCookie('name', JSON.stringify(name), { path: '/', expires: new Date(Date.now() +100000) });
+        setCookies('token', JSON.stringify(token), { path: '/', expires: new Date(Date.now() + 3600000 ) });
+        setCookies('perfil', JSON.stringify(profile), { path: '/', expires: new Date(Date.now() + 3600000 ) });
+        setCookies('name', JSON.stringify(name), { path: '/', expires: new Date(Date.now() + 3600000 ) });
 
         navigate(from, { replace: true });
     }
@@ -48,6 +46,6 @@ export const Login = () => {
     )
 }
 
-// Login.propTypes = {
-//     setToken: PropTypes.func.isRequired
-// }
+Login.propTypes = {
+    setCookies: PropTypes.func.isRequired
+}

@@ -1,20 +1,18 @@
-import { useCookies } from 'react-cookie';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Profile } from '../config/profiles';
+import { AuthService } from '../services/AuthService';
 
 export const Nav = () => {
-    const [cookies] = useCookies(['perfil', 'token'])
 
-    const isAuth = (perfil) => {
-        
-        if (!cookies.token) {
-			return false;
-		}
-		if(cookies.perfil){
-            if (!cookies.perfil.some(p => p === perfil))
-                return false;
-		}
-        return true;
+    const [isEnterprise, setEnterprise] = useState(false);
+
+    function userAuth(){
+        setEnterprise(AuthService.isAuth(Profile.ENTERPRISE))
     }
+
+    useEffect(() => { userAuth() })
+
     return (
     <nav className="navbar navbar-expand-lg mb-3" style={{'background': '#8bb4cf'}}>
         <div className="container-fluid">
@@ -22,10 +20,10 @@ export const Nav = () => {
                 <div className="navbar-nav">
                     <Link to={'/'}><span className="nav-link active">Home</span></Link>
                     {
-                        isAuth('Enterprise') ? 
+                        isEnterprise ? 
                             <>
-                            <Link to={'/novo/evento'}><span className="nav-link active">Criar Evento</span></Link>
-                            <Link to={'/eventos/criados'}><span className="nav-link">Meus Eventos</span></Link>
+                                <Link to={'/novo/evento'}><span className="nav-link active">Criar Evento</span></Link>
+                                <Link to={'/eventos/criados'}><span className="nav-link">Meus Eventos</span></Link>
                             </>
                             :
                             ''

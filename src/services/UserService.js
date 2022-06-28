@@ -1,11 +1,6 @@
-import axios from "axios";
-
-const instance = axios.create({
-	baseURL: 'http://localhost:3333/',
-	timeout: 1000
-});
-
+import instance from './ApiService'
 export class UserService {
+
 	static getUser() {
 		return instance.get('user');
 	}

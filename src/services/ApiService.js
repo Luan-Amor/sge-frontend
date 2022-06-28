@@ -1,19 +1,18 @@
 import axios from "axios";
-import { useCookies } from "react-cookie";
+import { CookieService } from './CookieService';
+
+const api = axios.create({
+    baseURL: 'http://localhost:3333/',
+    timeout: 1000
+});
+
+api.interceptors.request.use(async config => {
+    const token = CookieService.get('token'); 
+    if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+});
 
 
-const Instance = () => {
-    const api = axios.create({
-        baseURL: 'http://localhost:3333/',
-        timeout: 1000
-    });
-
-    return api;
-}
-
-export function ConfigAuth(){
-    const [cookie] = useCookies(['token']);
-    return { headers: { Authorization: `Bearer ${cookie?.token}` }}
-}
-
-export default Instance;
+export default api;

@@ -1,22 +1,19 @@
 import instance from './ApiService'
 export class EventService {
-	
-
-	api = instance()
 
 	static getEvents() {
-		return instance().get('events');
+		return instance.get('events');
 	}
 
 	static getEventById(id){
-		return instance().get(`events/${id}`);
+		return instance.get(`events/${id}`);
 	}
 
-	static getEventOfUser(token){
-		return instance().get(`events/users`, { headers: { Authorization: `Bearer ${token}`}});
+	static getEventOfUser(){
+		return instance.get(`events/users`);
 	}
 
 	static create(dto){
-		return instance().post('/events', dto )
+		return instance.post('/events', dto )
 	}
 }
