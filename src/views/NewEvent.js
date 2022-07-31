@@ -58,11 +58,9 @@ export const NewEvent = () => {
         event.preventDefault();
 
         setInput(inputs.videos = videos)
-        
-        console.log(inputs);
+
         try {
-            const result = await EventService.create(inputs);
-            console.log(result);
+            await EventService.create(inputs);
         } catch (error) {
             if(error.response?.status === 401){
                 navigate('/login', { replace: true })
@@ -73,7 +71,6 @@ export const NewEvent = () => {
             console.log(error);
             
         }
-
     }
 
     return (

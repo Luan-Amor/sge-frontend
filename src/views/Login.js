@@ -1,26 +1,33 @@
-import PropTypes from 'prop-types';
+import { useDispatch } from "react-redux";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useState } from 'react';
 import { AuthService } from '../services/AuthService';
+import { CookieService } from '../services/CookieService';
+import { addName, addToken } from '../store/actions'
+import jwt_decode from "jwt-decode";
 
-export const Login = ({ setCookies }) => {
+export const Login = () => {
     const [email, setEmail] = useState();
     const [password, setPassword] = useState();
 
     let navigate = useNavigate();
     let location = useLocation();
 
+    const dispatch = useDispatch();
+
     let from = location.state?.from?.pathname || "/";
 
     const handleSubmit = async e => {
         e.preventDefault();
 
-        const { token, profile, name } = await AuthService.login({ email, password })
+        const { token } = await AuthService.login({ email, password })
             .then(({ data }) => data);
 
-        setCookies('token', JSON.stringify(token), { path: '/', expires: new Date(Date.now() + 3600000 ) });
-        setCookies('perfil', JSON.stringify(profile), { path: '/', expires: new Date(Date.now() + 3600000 ) });
-        setCookies('name', JSON.stringify(name), { path: '/', expires: new Date(Date.now() + 3600000 ) });
+        const jwt = jwt_decode(token)
+        dispatch(addName(jwt.name))
+        dispatch(addToken(token))
+
+        CookieService.set('token', JSON.stringify(token), { path: '/', expires: new Date(Date.now() + 3600000 ) })
 
         navigate(from, { replace: true });
     }
@@ -44,8 +51,4 @@ export const Login = ({ setCookies }) => {
             </div>
         </div>
     )
-}
-
-Login.propTypes = {
-    setCookies: PropTypes.func.isRequired
 }

@@ -9,7 +9,11 @@ export const Home = () => {
     return (
         <div className='container'>
             <div className='d-flex flex-wrap'>
-                {events.map((event, i) => <Link to={`/events/${event.id}`} key={i}><Card item={event}></Card></Link>)}
+                {events.map((event, i) => 
+                    <Link to={`/events/${event.id}`} key={i}>
+                        <Card item={event}></Card>
+                    </Link>)
+                }
             </div>
         </div>
     )

@@ -9,4 +9,9 @@ export class UserService {
         return instance.post('users', input)
 				.then(data => data);
     }
+
+    static updateUser(input) {
+        return instance.put('users', input)
+				.then(data => data);
+    }
 }

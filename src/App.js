@@ -3,19 +3,21 @@ import { ApplicationRoutes } from './config/ApplicationRoutes';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle'
 import { Nav } from './components/Nav';
-import { useCookies } from 'react-cookie';
+import { Provider } from 'react-redux';
+import { store, persistor } from './store';
+import { PersistGate } from 'redux-persist/integration/react';
 
 function App() {
 
-  const [cookies, setCookies ] = useCookies(['name', 'perfil', 'token']);
-
   return (
-    <div>
-      <Header username={cookies.name}/>
-      <Nav />
-      <ApplicationRoutes setCookies={setCookies} cookies={cookies} />
-    </div>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <Header />
+        <Nav />
+        <ApplicationRoutes />
+      </PersistGate>
+    </Provider>
   );
 }
 
-export default App;
+export default (App);
