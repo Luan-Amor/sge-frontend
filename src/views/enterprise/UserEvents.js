@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { EventService } from "../services/EventService";
-import { Link } from "react-router-dom";
-import { Card } from "../components/Card";
+import { EventService } from "../../services/EventService";
+import { TableEvent } from "../../components/TableEvent"
 
 
 export const UserEvents = () => {
@@ -14,8 +13,8 @@ export const UserEvents = () => {
         const token = cookie.token
         const { data } = await EventService.getEventOfUser(token);
         setEvents(data)
-    }
-    
+    }  
+
     useEffect(() => {
         getEvents();
     })
@@ -23,7 +22,7 @@ export const UserEvents = () => {
     return (
         <div className='container'>
             <div className='d-flex flex-wrap'>
-                {events.map((event, i) => <Link to={`/events/${event.id}`} key={i}><Card item={event}></Card></Link>)}
+                <TableEvent events={events} />
             </div>
         </div>
     )

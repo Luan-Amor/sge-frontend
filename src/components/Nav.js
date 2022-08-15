@@ -31,7 +31,6 @@ export const Nav = () => {
                             isEnterprise ?
                                 <>
                                     <Link to={'/novo/evento'}><span className="nav-link active">Criar Evento</span></Link>
-                                    <Link to={'/eventos/criados'}><span className="nav-link">Meus Eventos</span></Link>
                                 </>
                                 :
                                 isComum ?

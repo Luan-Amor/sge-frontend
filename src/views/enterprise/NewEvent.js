@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { EventService } from "../services/EventService";
+import { EventService } from "../../services/EventService";
 
 export const NewEvent = () => {
 

@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
-import { useEvent } from "../hooks/useEvent";
+import { useEvent } from "../../hooks/useEvent";
 import QRCode from "react-qr-code";
 import moment from "moment";
 import { FaRegCalendarAlt, FaMapMarkedAlt} from 'react-icons/fa'
-import { AuthService } from "../services/AuthService";
+import { AuthService } from "../../services/AuthService";
 
 export const Enroll = () => {
 
