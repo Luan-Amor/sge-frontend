@@ -24,7 +24,7 @@ export class AuthService {
 	}
 
 	static decodeToken(token){
-		return jwt_decode(token);
+		return token ? jwt_decode(token) : "";
 	}
 
 	static isAuth(perfil){

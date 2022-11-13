@@ -25,6 +25,7 @@ export const SingUp = () => {
 
         try {
             await UserService.createUser(inputs);
+
             navigate('/', { replace: true})
         } catch (error) {
             if(error.response.status === 400){
@@ -36,7 +37,6 @@ export const SingUp = () => {
 
     return (
         <>
-
         <div className="container d-flex flex-column align-items-center justify-content-center p-5">
             {
                 configs.alertStatus ?

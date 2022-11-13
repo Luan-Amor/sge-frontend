@@ -13,7 +13,6 @@ export class UserService {
     static updateUser(id, input) {
         return instance.put(`users/${id}`, input)
 				.then(data => {
-          console.log(data);
           return data
         });
     }
