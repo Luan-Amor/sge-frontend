@@ -1,22 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState, useCallback } from "react";
 import { EventService } from "../services/EventService";
 
 export const useEvent = (id) => {
 
-    const [event, setEvent] = useState([]); 
-    let isMounted = true;
+    const [event, setEvent] = useState({}); 
 
-    useEffect(() => {
-        EventService.getEventById(id)
-            .then(({data}) => {
-                if(isMounted){
-                    console.log(data)
-                    setEvent(data)
-                }
-            })
-            return () => { isMounted = false; }
-        },[])
+    const getEvent = useCallback(async () => {
+        const {status, data } = await EventService.getEventById(id);
+        if(status !== 200) throw new Error();
+        setEvent(data)
 
-    return [event, setEvent]
+    },[id])
+
+
+    return {event, getEvent}
 
 } 

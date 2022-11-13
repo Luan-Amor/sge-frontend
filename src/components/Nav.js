@@ -6,20 +6,20 @@ import { useSelector } from "react-redux";
 
 export const Nav = () => {
 
-    const [isEnterprise, setEnterprise] = useState(false);
-    const [isComum, setComum] = useState(false);
+    const [isOrganizer, setOrganizer] = useState(false);
+    const [isUser, setUser] = useState(false);
     const [isAdmin, setAdmin] = useState(false);
     const { token } = useSelector(state => state);
 
-    const { perfil } = AuthService.decodeToken(token.token)
+    const { role } = AuthService.decodeToken(token.token)
 
-    function userAuth(perfil) {
-        setEnterprise(perfil === Profile.ENTERPRISE)
-        setComum(perfil === Profile.COMUM)
-        setAdmin(perfil === Profile.ADMIN)
+    function userAuth(role) {
+        setOrganizer(role === Profile.ORGANIZER)
+        setUser(role === Profile.USER)
+        setAdmin(role === Profile.ADMIN)
     }
 
-    useEffect(() => { userAuth(perfil) })
+    useEffect(() => { userAuth(role) })
 
     return (
         <nav className="navbar navbar-expand-lg mb-3" style={{ 'background': '#8bb4cf' }}>
@@ -28,12 +28,12 @@ export const Nav = () => {
                     <div className="navbar-nav">
                         <Link to={'/'}><span className="nav-link active">Home</span></Link>
                         {
-                            isEnterprise ?
+                            isOrganizer ?
                                 <>
                                     <Link to={'/novo/evento'}><span className="nav-link active">Criar Evento</span></Link>
                                 </>
                                 :
-                                isComum ?
+                                isUser ?
                                     <>
                                         <Link to={'/usuarios/inscricoes'}><span className="nav-link">Meus Eventos</span></Link>
                                     </>

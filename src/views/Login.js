@@ -20,14 +20,16 @@ export const Login = () => {
     const handleSubmit = async e => {
         e.preventDefault();
 
-        const { token } = await AuthService.login({ email, password })
+        const { access_token } = await AuthService.login({ email, password })
             .then(({ data }) => data);
 
-        const jwt = jwt_decode(token)
-        dispatch(addName(jwt.name))
-        dispatch(addToken(token))
+            
+        const {name} = jwt_decode(access_token)
 
-        CookieService.set('token', JSON.stringify(token), { path: '/', expires: new Date(Date.now() + 3600000 ) })
+        dispatch(addName(name))
+        dispatch(addToken(access_token))
+
+        CookieService.set('token', JSON.stringify(access_token), { path: '/', expires: new Date(Date.now() + 3600000 ) })
 
         navigate(from, { replace: true });
     }

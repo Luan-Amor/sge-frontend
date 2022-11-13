@@ -3,9 +3,8 @@ import { CookieService } from './CookieService';
 import jwt_decode from "jwt-decode";
 export class AuthService {
 
-
 	static login(credentials) {
-		return instance.post('login', credentials)
+		return instance.post('auth/login', credentials)
 	}
 
 	static isAuthenticated(){
@@ -13,10 +12,10 @@ export class AuthService {
 		return token !== undefined;
 	}
 
-	static hasProfile(perfilUser){
+	static hasProfile(profile){
 		const token = CookieService.get('token'); 
-		const {perfil} = jwt_decode(token);
-        return perfil === perfilUser;
+		const { role } = jwt_decode(token);
+        return role === profile;
 	}
 
 	static getTokenDecode(){
@@ -25,7 +24,7 @@ export class AuthService {
 	}
 
 	static decodeToken(token){
-		return token ? jwt_decode(token) : "";
+		return jwt_decode(token);
 	}
 
 	static isAuth(perfil){

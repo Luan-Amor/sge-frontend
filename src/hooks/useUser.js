@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { AuthService } from "../services/AuthService";
 import { UserService } from "../services/UserService";
 
 export const useUser = () => {
@@ -7,7 +8,8 @@ export const useUser = () => {
     let isMounted = true;
 
     useEffect(() => {
-        UserService.getUser()
+        const {id} = AuthService.getTokenDecode();
+        UserService.getUser(id)
             .then(({data}) => {
                 if(isMounted){
                     setUser(data)

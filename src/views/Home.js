@@ -1,4 +1,5 @@
 import { Card } from '../components/Card';
+import { useEffect } from "react";
 import { useEventList } from '../hooks/useEventList'
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -8,13 +9,15 @@ import { TableEvent } from '../components/TableEvent'
 
 export const Home = () => {
 
-    const [events] = useEventList();
+    const {events, getAll} = useEventList();
 
     const { token } = useSelector(state => state);
 
     const { perfil } = AuthService.decodeToken(token.token)
 
-
+    useEffect(() => {
+        getAll();
+    },[getAll])
     return (
         <div className='container'>
             <div className='d-flex flex-wrap'>
@@ -22,7 +25,7 @@ export const Home = () => {
                     perfil === Profile.ADMIN ?
                     <h1>ADMIN</h1>
                     :
-                    perfil === Profile.ENTERPRISE ?
+                    perfil === Profile.ORGANIZER ?
                     <TableEvent events={events} />
                     :
                     events.map((event, i) => 

@@ -20,6 +20,7 @@ export const ApplicationRoutes = () => {
 			return <Navigate to="/login" state={{ from: location }} replace />;
 		}
 		if(!AuthService.hasProfile(perfil) && perfil !== 'Free'){
+			console.log('Profile: ', perfil);
 			return <Navigate to="/" state={{ from: location }} replace />;
 		}
 		return children;
@@ -34,12 +35,12 @@ export const ApplicationRoutes = () => {
 			<Route path="/events/:id" exact element={<EventDetail />} />
 			{/* Authentication */}
 			<Route path="/users/" exact element={ <RequireAuth  perfil={'Free'} ><UserProfile /></RequireAuth>} />
-			{/* Profile Comum */}
-			<Route path="/enroll/:id" exact element={ <RequireAuth perfil={Profile.COMUM} ><Enroll /></RequireAuth>} />
-			<Route path="/usuarios/inscricoes" exact element={ <RequireAuth perfil={Profile.COMUM} ><Enrollments /></RequireAuth>} />
-			{/* Profile Enterprise */}
-			<Route path="/novo/evento" exact element={ <RequireAuth perfil={Profile.ENTERPRISE} ><NewEvent/></RequireAuth>} />
-			<Route path="/eventos/:idEvent/:idUser" exact element={ <RequireAuth perfil={Profile.ENTERPRISE} ><ValideUser/></RequireAuth>} />
+			{/* Profile User */}
+			<Route path="/enroll/:id" exact element={ <RequireAuth perfil={Profile.USER} ><Enroll /></RequireAuth>} />
+			<Route path="/usuarios/inscricoes" exact element={ <RequireAuth perfil={Profile.USER} ><Enrollments /></RequireAuth>} />
+			{/* Profile Organizer */}
+			<Route path="/novo/evento" exact element={ <RequireAuth perfil={Profile.ORGANIZER} ><NewEvent/></RequireAuth>} />
+			<Route path="/eventos/:idEvent/:idUser" exact element={ <RequireAuth perfil={Profile.ORGANIZER} ><ValideUser/></RequireAuth>} />
 			{/* Profile Admin */}
 		</Routes>
 	)

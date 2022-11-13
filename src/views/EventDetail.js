@@ -11,7 +11,7 @@ import { EnrollService } from "../services/EnrollService";
 export const EventDetail = () => {
     const {id} = useParams();
 
-    const [event] = useEvent(id);
+    const {event, getEvent } = useEvent(id);
     const [enrolls] = useEventEnrollList();
     const [enroll, setEnroll] = useState();
     const navigate = useNavigate();
@@ -21,14 +21,14 @@ export const EventDetail = () => {
     }
 
     const userIsEnroll = () => {
-        setEnroll(enrolls.find((enroll) => ( enroll.event_id === parseInt(id))))
+        setEnroll(enrolls.find((enroll) => ( enroll.eventId === parseInt(id))))
     }
 
     async function handleSubmit(event){
         event.preventDefault();
 
         try {
-            await EnrollService.enrollOnEvent(id)
+            await EnrollService.getEventsEnroll()
         } catch (error) {
             console.log(error)
             if(error.response.status === 401){
@@ -38,8 +38,9 @@ export const EventDetail = () => {
     }
 
     useEffect(() => {
-        userIsEnroll()
-    })
+        userIsEnroll();
+        getEvent()
+    }, [getEvent, userIsEnroll])
 
     return (
         <div className="container">
@@ -48,7 +49,7 @@ export const EventDetail = () => {
                 <div className="col-9">
                 <h1>{event.name}</h1>
                 <div className="mb-3">
-                <small className="text-muted"><FaRegCalendarAlt className="mb-1"/> {formatDate(event.start_event_date)} - {formatDate(event.end_event_date)} 
+                <small className="text-muted"><FaRegCalendarAlt className="mb-1"/> {formatDate(event.startEventDate)} - {formatDate(event.endEventDate)} 
                 <br/><FaMapMarkedAlt className="mb-1"/> PUC MINAS | vagas {event.spots}</small>
                 </div>
                     <h3>Descrição</h3>
@@ -62,7 +63,7 @@ export const EventDetail = () => {
                             enroll.paid ?
                                 <div>
                                     <h3>Valor</h3>
-                                    {event.ticket_price === '0' ? <p className="text-success h5">Grátis</p> : <p className="h5">R$ {event.ticket_price}</p> }
+                                    {event.ticketPrice <= 0 ? <p className="text-success h5">Grátis</p> : <p className="h5">R$ {event.ticketPrice}</p> }
                                     <p className="text-muted">Inscrito</p>
                                     <Link to={`/enroll/${id}`} >
                                         <button className="btn btn-success w-100 shadow mb-5" >Convite</button>
@@ -71,14 +72,14 @@ export const EventDetail = () => {
                                 :
                                 <div>
                                     <h3>Valor</h3>
-                                    {<p className="h5">R$ {event.ticket_price}</p>}
+                                    {<p className="h5">R$ {event.ticketPrice}</p>}
                                     <p className="text-muted">Inscrito - Pagamento pendente</p>
                                         <button className="btn btn-success w-100 shadow mb-5" >Pagar</button>
                                 </div>
                         :                        
                             <form onSubmit={handleSubmit}>
                                 <h3>Valor</h3>
-                                {event.ticket_price === '0' ? <p className="text-success h5">Grátis</p> : <p className="h5">R$ {event.ticket_price}</p> }
+                                {event.ticketPrice <= '0' ? <p className="text-success h5">Grátis</p> : <p className="h5">R$ {event.ticketPrice}</p> }
                                 <button type="submit" className="btn btn-success w-100 shadow mb-5" >Participar</button>
                             </form>
                     }
