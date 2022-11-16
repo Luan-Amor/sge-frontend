@@ -10,6 +10,7 @@ import { AuthService } from "../services/AuthService";
 import { Enroll } from "../views/comum/Enroll";
 import { Enrollments } from "../views/comum/Enrollments";
 import { ValideUser } from "../views/enterprise/ValideUser";
+import { EventDatailEnterprise } from "../views/enterprise/EventDetailEnterprise";
 
 export const ApplicationRoutes = () => {
 
@@ -20,7 +21,6 @@ export const ApplicationRoutes = () => {
 			return <Navigate to="/login" state={{ from: location }} replace />;
 		}
 		if(!AuthService.hasProfile(perfil) && perfil !== 'Free'){
-			console.log('Profile: ', perfil);
 			return <Navigate to="/" state={{ from: location }} replace />;
 		}
 		return children;
@@ -38,6 +38,7 @@ export const ApplicationRoutes = () => {
 			{/* Profile User */}
 			<Route path="/enroll/:id" exact element={ <RequireAuth perfil={Profile.USER} ><Enroll /></RequireAuth>} />
 			<Route path="/usuarios/inscricoes" exact element={ <RequireAuth perfil={Profile.USER} ><Enrollments /></RequireAuth>} />
+			<Route path="/eventos/inscricoes/:id" exact element={ <RequireAuth perfil={Profile.ORGANIZER} ><EventDatailEnterprise /></RequireAuth>} />
 			{/* Profile Organizer */}
 			<Route path="/novo/evento" exact element={ <RequireAuth perfil={Profile.ORGANIZER} ><NewEvent/></RequireAuth>} />
 			<Route path="/eventos/:idEvent/:idUser" exact element={ <RequireAuth perfil={Profile.ORGANIZER} ><ValideUser/></RequireAuth>} />

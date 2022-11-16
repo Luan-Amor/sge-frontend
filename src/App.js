@@ -1,7 +1,7 @@
 import { Header } from './components/Header';
 import { ApplicationRoutes } from './config/ApplicationRoutes';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle'
+import 'bootstrap/dist/js/bootstrap.bundle';
 import { Nav } from './components/Nav';
 import { Provider } from 'react-redux';
 import { store, persistor } from './store';

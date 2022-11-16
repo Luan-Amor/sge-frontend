@@ -7,14 +7,17 @@ import ReactPlayer from 'react-player'
 import { useEventEnrollList } from "../hooks/useEventEnrollList";
 import { useEffect, useState } from "react";
 import { EnrollService } from "../services/EnrollService";
+import { useAlert } from "react-alert";
 
 export const EventDetail = () => {
-    const {id} = useParams();
+    const { id } = useParams();
 
     const {event, getEvent } = useEvent(id);
     const [enrolls] = useEventEnrollList();
     const [enroll, setEnroll] = useState();
     const navigate = useNavigate();
+
+    const alert = useAlert();
 
     function formatDate(data){
         return moment(data).format('DD/MM/YYYY HH:mm' )
@@ -28,11 +31,18 @@ export const EventDetail = () => {
         event.preventDefault();
 
         try {
-            await EnrollService.getEventsEnroll()
+
+            await EnrollService.enrollOnEvent(id);
+
+            alert.info('Você está inscrito no evento.');
+
         } catch (error) {
-            console.log(error)
             if(error.response.status === 401){
-                navigate('/login')
+                navigate('/login');
+            }
+            if(error.response.status === 400){
+                alert.error('Não foi possível fazer a inscrição no evento.');
+                console.log(error.response.message);
             }
         }
     }
@@ -47,11 +57,11 @@ export const EventDetail = () => {
             <img src={imageEvent} className="img-fluid w-100 shadow mb-5" alt="..."></img>
             <div className="row mb-5">
                 <div className="col-9">
-                <h1>{event.name}</h1>
-                <div className="mb-3">
-                <small className="text-muted"><FaRegCalendarAlt className="mb-1"/> {formatDate(event.startEventDate)} - {formatDate(event.endEventDate)} 
-                <br/><FaMapMarkedAlt className="mb-1"/> PUC MINAS | vagas {event.spots}</small>
-                </div>
+                    <h1>{event.name}</h1>
+                    <div className="mb-3">
+                        <small className="text-muted"><FaRegCalendarAlt className="mb-1"/> {formatDate(event.startEventDate)} - {formatDate(event.endEventDate)} 
+                        <br/><FaMapMarkedAlt className="mb-1"/> PUC MINAS | vagas {event.spots}</small>
+                    </div>
                     <h3>Descrição</h3>
                     <p>{event.description}</p>
                 </div>

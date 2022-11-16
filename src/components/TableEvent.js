@@ -26,11 +26,11 @@ export const TableEvent = ({events}) => {
                     <tr key={i}>
                         <th scope="row">{i + 1}</th>
                         <td>{event.name}</td>
-                        <td>{event.ticket_price}</td>
+                        <td>{event.ticketPrice <= 0 ? 'Grátis': `R$ ${event.ticketPrice}`}</td>
                         <td>{event.spots}</td>
-                        <td>{formatDate(event.start_event_date)}</td>
-                        <td>{formatDate(event.end_event_date)}</td>
-                        <td><Link to={`/events/${event.id}`}><span>{<FaEye size={"24"}/>}</span></Link></td>
+                        <td>{formatDate(event.startEventDate)}</td>
+                        <td>{formatDate(event.endEventDate)}</td>
+                        <td><Link to={`/eventos/inscricoes/${event.id}`}><span>{<FaEye size={"24"}/>}</span></Link></td>
                     </tr>
                 )}
             </tbody>

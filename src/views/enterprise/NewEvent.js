@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAlert } from "react-alert";
 import { useNavigate } from "react-router-dom";
 import { EventService } from "../../services/EventService";
 
@@ -9,14 +10,15 @@ export const NewEvent = () => {
     const [videos, setVideos] = useState([]);
     const [isUpdateVideo, setIsUpdateVideo] = useState(false);
     const navigate = useNavigate();
+    const alert = useAlert();
 
     function addVideo() {
         if(!Object.keys(video).some(e => e === 'name')){
-            alert('O preenchimento do nome é obrigatório')
+            alert.info('O preenchimento do nome é obrigatório')
             return
         }
         if(!Object.keys(video).some(e => e === 'url')){
-            alert('O preenchimento da URL é obrigatório')
+            alert.info('O preenchimento da URL é obrigatório')
             return
         }
         let newArray = videos.slice();
@@ -60,16 +62,17 @@ export const NewEvent = () => {
         setInput(inputs.videos = videos)
 
         try {
-            await EventService.create(inputs);
+            const event = await EventService.create(inputs);
+            alert.success(`Evento criado com sucesso`);
+            navigate('/', { replace: true })
         } catch (error) {
             if(error.response?.status === 401){
                 navigate('/login', { replace: true })
             }
             if(error.response?.status === 400){
+                alert.error(`Não foi possível criar o evento.`);
                 console.log(error.response?.data);
             }
-            console.log(error);
-            
         }
     }
 
@@ -103,22 +106,22 @@ export const NewEvent = () => {
                     <div className="col-md-6">
                         <label className="form-label">Valor do ingresso</label>
                         <input type="number" className="form-control" 
-                            name="ticket_price"
-                            value={inputs.ticket_price || 0}
+                            name="ticketPrice"
+                            value={inputs.ticketPrice || 0}
                             onChange={handleChange} required/>
                     </div>
                     <div className="col-md-6">
                         <label className="form-label">Data de início do evento</label>
                         <input type="datetime-local" className="form-control" 
-                            name="start_event_date"
-                            value={inputs.start_event_date || ''}
+                            name="startEventDate"
+                            value={inputs.startEventDate || ''}
                             onChange={handleChange}/>
                     </div>
                     <div className="col-md-6">
                         <label className="form-label">Data de fim do evento</label>
                         <input type="datetime-local" className="form-control"                             
-                            name="end_event_date"
-                            value={inputs.end_event_date || ''}
+                            name="endEventDate"
+                            value={inputs.endEventDate || ''}
                             onChange={handleChange}/>
                     </div>
                     <div className="mb-3 col-12">
@@ -182,17 +185,3 @@ export const NewEvent = () => {
         </div>
     )
 }
-
-// name: string,
-// description: string,
-// url: string;
-
-// name: string;
-// description: string;
-// speaker?: string;
-// ticket_price?: number;
-// spots?: number;
-// owner_id: string;
-// videos?: Video[];
-// start_event_date?: Date;
-// end_event_date?: Date;

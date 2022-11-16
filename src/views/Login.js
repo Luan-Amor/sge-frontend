@@ -5,6 +5,7 @@ import { AuthService } from '../services/AuthService';
 import { CookieService } from '../services/CookieService';
 import { addName, addToken } from '../store/actions'
 import jwt_decode from "jwt-decode";
+import { useAlert } from "react-alert";
 
 export const Login = () => {
     const [email, setEmail] = useState();
@@ -14,24 +15,30 @@ export const Login = () => {
     let location = useLocation();
 
     const dispatch = useDispatch();
+    const alert = useAlert();
 
     let from = location.state?.from?.pathname || "/";
 
     const handleSubmit = async e => {
         e.preventDefault();
 
-        const { access_token } = await AuthService.login({ email, password })
-            .then(({ data }) => data);
-
+        try {
+            const { access_token } = await AuthService.login({ email, password })
+                .then(({ data }) => data);
+    
+                
+            const {name} = jwt_decode(access_token)
+    
+            dispatch(addName(name))
+            dispatch(addToken(access_token))
+    
+            CookieService.set('token', JSON.stringify(access_token), { path: '/', expires: new Date(Date.now() + 3600000 ) })
+    
+            navigate(from, { replace: true });
             
-        const {name} = jwt_decode(access_token)
-
-        dispatch(addName(name))
-        dispatch(addToken(access_token))
-
-        CookieService.set('token', JSON.stringify(access_token), { path: '/', expires: new Date(Date.now() + 3600000 ) })
-
-        navigate(from, { replace: true });
+        } catch (error) {
+            alert.error('Usuário e/ou senha inválido(s).')
+        }
     }
 
     return (

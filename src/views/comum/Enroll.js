@@ -11,7 +11,7 @@ export const Enroll = () => {
 
     const { id: idUser } = AuthService.getTokenDecode();
 
-    const [event] = useEvent(id);
+    const {event} = useEvent(id);
 
     function formatDate(data){
         return moment(data).format('DD/MM/YYYY HH:mm' )
@@ -26,7 +26,7 @@ export const Enroll = () => {
                 <br/><FaMapMarkedAlt className="mb-1"/> PUC MINAS </small>
                 </div>
 
-                <QRCode value={`http://localhost:3333/enrollments/${id}/${idUser}`}></QRCode>
+                <QRCode value={`${process.env.REACT_APP_API_URL}enrollments/${id}/${idUser}`}></QRCode>
             </div>
 
         </div>

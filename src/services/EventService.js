@@ -1,4 +1,5 @@
 import instance from './ApiService'
+
 export class EventService {
 
 	static getEvents() {
@@ -10,8 +11,8 @@ export class EventService {
 	}
 
 	static getEventOfUser(){
-		return instance.get(`events/users`);
-	}
+		return instance.get(`events/users`)
+		}
 
 	static create(dto){
 		return instance.post('/events', dto )

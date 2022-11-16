@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useAlert } from "react-alert";
 import { useNavigate } from "react-router-dom";
 import { UserService } from "../services/UserService";
 
@@ -6,9 +7,10 @@ import { UserService } from "../services/UserService";
 export const SingUp = () => {
 
     const [inputs, setInputs] = useState({});
-    const [configs, setConfigs] = useState({});
     const [checkboxEnterprese, setCheckboxEntreprise] = useState(false)
     const navigate = useNavigate();
+
+    const alert = useAlert();
 
     const handleChange = (event) => {
         if(event.target.type === 'checkbox'){
@@ -20,17 +22,20 @@ export const SingUp = () => {
         }
     }
 
+
+
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         try {
             await UserService.createUser(inputs);
 
-            navigate('/', { replace: true})
+            await alert.success('Usuário criado com sucesso.')
+
+            navigate('/login', { replace: true})
         } catch (error) {
             if(error.response.status === 400){
-                setConfigs({alertStatus : true, alertMessages: error.response.data })
-                setTimeout(() => setConfigs({alertStatus : false}), 1500);
+                alert.error('Não foi possível criar o usuário. Verifique as informações e tente novamente. ')
             }
         }
     }
@@ -38,17 +43,6 @@ export const SingUp = () => {
     return (
         <>
         <div className="container d-flex flex-column align-items-center justify-content-center p-5">
-            {
-                configs.alertStatus ?
-                <div className="alert alert-danger w-50 opacity-75 position-relative top-0 shadow" role="alert">
-                    <span className="fw-bold">
-                        {configs.alertMessages 
-                        ? configs.alertMessages : 'Não foi possível cadastrar o usuário.'}
-                    </span>
-                </div>
-                :
-                ''
-            }
             <form onSubmit={handleSubmit} className="row g-2 w-50 border shadow p-2">
                 <h4 className="">Cadastro</h4>
                 <div className="col-12">

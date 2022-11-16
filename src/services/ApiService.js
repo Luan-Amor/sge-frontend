@@ -7,11 +7,15 @@ const api = axios.create({
 });
 
 api.interceptors.request.use(async config => {
-    const token = CookieService.get('token'); 
-    if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-    }
+    const token = await CookieService.get('token'); 
+    if (token) { config.headers.Authorization = `Bearer ${token}`; }
     return config;
+}, async (error) => {
+    console.log("# Error Intercept", error);
+    if(error.response.status === 401){
+        await CookieService.remove('token');  
+    }
+    return error;
 });
 
 

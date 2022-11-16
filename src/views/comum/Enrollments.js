@@ -17,7 +17,7 @@ export const Enrollments = () => {
                 {
                     enrolls.map((enroll, i) => { 
                         if(enroll.paid){
-                            return <Link to={`/events/${enroll.event_id}`} key={i}>
+                            return <Link to={`/events/${enroll.eventId}`} key={i}>
                                         <Card item={enroll.event}></Card>
                                     </Link>
                         }
@@ -31,7 +31,7 @@ export const Enrollments = () => {
                 {
                     enrolls.map((enroll, i) => { 
                     if(!enroll.paid){
-                        return <Link to={`/events/${enroll.event_id}`} key={i}>
+                        return <Link to={`/events/${enroll.eventId}`} key={i}>
                                     <Card item={enroll.event}></Card>
                                 </Link>
                     }

@@ -13,7 +13,7 @@ export const Home = () => {
 
     const { token } = useSelector(state => state);
 
-    const { perfil } = AuthService.decodeToken(token.token)
+    const { role } = AuthService.decodeToken(token.token)
 
     useEffect(() => {
         getAll();
@@ -22,11 +22,13 @@ export const Home = () => {
         <div className='container'>
             <div className='d-flex flex-wrap'>
                 {
-                    perfil === Profile.ADMIN ?
+                    role === Profile.ADMIN ?
                     <h1>ADMIN</h1>
                     :
-                    perfil === Profile.ORGANIZER ?
-                    <TableEvent events={events} />
+                    role === Profile.ORGANIZER ?
+                    <>
+                        <TableEvent events={events} />
+                    </>
                     :
                     events.map((event, i) => 
                     <Link to={`/events/${event.id}`} key={i}>

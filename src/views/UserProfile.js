@@ -1,14 +1,21 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAlert } from "react-alert";
+import { useDispatch } from "react-redux";
 import { useUser } from "../hooks/useUser";
+import { AuthService } from "../services/AuthService";
 import { UserService } from "../services/UserService";
+import { addName } from "../store/actions";
 
 export const UserProfile = () => {
 
     const [isReadOnly, setReadOnly] = useState(true);
     const [inputs, setInputs] = useState({});
 
-    const [user] = useUser()
+    const dispatch = useDispatch();
+    const alert = useAlert();
+
+    const {user, getUser} = useUser();
 
     function updateUser() {
         setReadOnly(false)
@@ -24,12 +31,21 @@ export const UserProfile = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await UserService.updateUser(inputs);
+            const {id} = AuthService.getTokenDecode();
+            await UserService.updateUser(id, inputs);
+
+            if(inputs.name) { dispatch(addName(inputs.name)) }
+
+            alert.success('Usuário atualizado com sucesso. ')
+
         } catch (error) {
             console.log(error);
+            alert.error('Não foi possível atualizar o usuário.')
         }
         setReadOnly(true)
     }
+
+    useEffect(() => {getUser()}, [getUser])
 
 
     return (
@@ -100,9 +116,3 @@ export const UserProfile = () => {
         </div>
     );
 }
-
-// city: "Brasília"
-// cpfCnpj: "11.111.111/0001.11"
-// email: "gm@email.com"
-// name: "GM"
-// state: "DF"
